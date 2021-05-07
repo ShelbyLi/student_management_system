@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shelby.mapper.StudentMapper">
+    <!-- 1、查询学生详细（包括简历信息） -->
+    <select id="queryById" resultMap="studentWithResume">
+        SELECT s.id s_id, s.name s_name, s.age s_age, r.id r_id,  r.content r_content, e.id e_id, e.time e_time, e.content e_content
+        FROM student s
+        LEFT JOIN resume r
+        ON s.id=r.stu_id
+        LEFT JOIN experience e
+        ON r.id=e.resume_id
+        WHERE s.id=#{id}
+    </select>
+    <resultMap id="studentWithResume" type="Student">
+        <id property="id" column="s_id" />
+        <result property="name" column="s_name" />
+        <result property="age" column="s_age" />
+        <association property="resume" column="r_id"  resultMap="resumeResultMap"/>
+    </resultMap>
+    <resultMap id="resumeResultMap" type="Resume">
+        <id property="id" column="r_id" />
+        <result property="content" column="r_content" />
+        <collection property="experienceList" ofType="Experience">
+            <id property="id" column="e_id"/>
+            <result property="time" column="e_time"/>
+            <result property="content" column="e_content"/>
+        </collection>
+    </resultMap>
+</mapper>
