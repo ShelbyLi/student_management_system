@@ -35,4 +35,6 @@ public interface StudentMapper {
 
     @Select("SELECT * FROM student ")
     Page<Student> getUserList();
+
+    public List<Student> query(String name, Integer age);
 }

@@ -27,4 +27,15 @@
             <result property="content" column="e_content"/>
         </collection>
     </resultMap>
+
+    <select id="query" resultMap="studentWithResume">
+        SELECT s.id s_id, s.`name` s_name, s.age s_age, r.id r_id,  r.content r_content, e.id e_id, e.time e_time, e.content e_content
+        FROM student s
+        LEFT JOIN resume r
+        ON s.id=r.stu_id
+        LEFT JOIN experience e
+        ON r.id=e.resume_id
+        WHERE s.`name` LIKE "%"#{name}"%"
+        AND s.age = #{age}
+    </select>
 </mapper>

@@ -1,5 +1,7 @@
 package com.shelby.controller;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.shelby.entity.Resume;
 import com.shelby.entity.Student;
 import com.shelby.mapper.ResumeMapper;
@@ -9,11 +11,9 @@ import com.shelby.result.Response;
 import com.shelby.result.ResponseData;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -46,6 +46,26 @@ public class StudentController {
     public ResponseData getStudentList() {
         List<Student> list = new ArrayList<Student>(studentMapper.queryAll());
         return new ResponseData(ExceptionMsg.SUCCESS, list);
+    }
+
+    @ApiOperation(value = "getStudentListPage", notes = "获取学生信息列表 ")
+    @RequestMapping(value = "/list", method = RequestMethod.GET)
+    public ResponseData getStudentListPage(@ApiParam(name="currentPage",value="当前页") @RequestParam(defaultValue = "1")Integer currentPage,
+                                           @ApiParam(name="limit",value="每页数量") @RequestParam(defaultValue = "20")Integer limit,
+                                           @ApiParam(name="name",value="模糊查询姓名") @RequestParam(defaultValue = "")String name,
+                                           @ApiParam(name="name",value="年龄") @RequestParam(defaultValue = "")Integer age)
+//                                           @ApiParam(name="sort",value="排序方法") @RequestParam(defaultValue = "")String sort)
+    {
+//        PageHelper.startPage(currentPage, limit,"id desc");
+        PageHelper.startPage(currentPage, limit);
+        //3. 因为PageHelper的作用，这里就会返回当前分页的集合了
+        List<Student> list = studentMapper.query(name, age);
+        //4. 根据返回的集合，创建PageInfo对象
+        PageInfo<Student> page = new PageInfo<>(list);
+
+//        List<Student> list = new ArrayList<Student>(studentMapper.query(currentPage, limit, name, age));
+//        List<Student> list = new ArrayList<Student>(studentMapper.query(currentPage, limit, name, age, sort));
+        return new ResponseData(ExceptionMsg.SUCCESS, page);
     }
 
     //增
