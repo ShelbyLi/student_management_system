@@ -8,4 +8,8 @@
         FROM admin
         WHERE `name` = #{name}
     </select>
+    <insert id="insertData">
+        INSERT INTO admin (`name`, `password`)
+        VALUES (#{name}, #{password})
+    </insert>
 </mapper>

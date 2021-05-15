@@ -1,5 +1,6 @@
 package com.shelby;
 
+import com.shelby.entity.Admin;
 import com.shelby.service.impl.AdminServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,8 @@ class StudentManagementSystemApplicationTests {
 
 	@Test
 	void contextLoads() {
-		System.out.println(adminService.queryByUsername("root"));
+		Admin admin = adminService.queryByName("root");
+		System.out.println(admin.getId());
 	}
 
 }

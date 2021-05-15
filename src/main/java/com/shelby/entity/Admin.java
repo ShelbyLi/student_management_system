@@ -16,13 +16,23 @@ import javax.persistence.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Admin {
+public class Admin extends UserEntity{
     @Id
-    private int id;
-    @Column(unique =true)
-    private String name;
+    protected Long id; // 主键ID
     @Column
-    private String pwd;
+    protected String name; // 登录用户名
+    @Column
+    protected String password; // 登录密码
+    @Column
+    protected String nickName; // 昵称
+    @Column
+    protected Boolean locked; // 账户是否被锁定
+//    @Id
+//    private int id;
+//    @Column(unique =true)
+//    private String name;
+//    @Column
+//    private String pwd;
     @Column
     private String perms;
 //    @Id

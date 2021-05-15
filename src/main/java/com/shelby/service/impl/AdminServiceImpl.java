@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Map;
 
 /**
  * @Author Shelby Li
@@ -19,7 +20,15 @@ public class AdminServiceImpl implements AdminService {
     private AdminMapper adminMapper;
 
     @Override
-    public Admin queryByUsername(String name) {
+    public Admin queryByName(String name) {
         return adminMapper.queryByName(name);
+    }
+
+    @Override
+    public void insertData(Map<String, String> dataMap) {
+//        Admin admin = new Admin();
+//        admin.setName(dataMap.get("name"));
+//        admin.setPassword(dataMap.get("password"));
+        adminMapper.insertData(dataMap.get("name"), dataMap.get("password"));
     }
 }

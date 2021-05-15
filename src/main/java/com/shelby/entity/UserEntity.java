@@ -1,23 +1,26 @@
 package com.shelby.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.apache.tomcat.jni.User;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
+import java.io.Serializable;
 
 /**
  * @Author Shelby Li
- * @Date 2021/4/21 14:31
+ * @Date 2021/5/15 19:45
  * @Version 1.0
  */
 
 @Data
-public class Student extends UserEntity {
-//    @Id
-//    private int id;
-//    @Column
-//    private String name;
+@NoArgsConstructor
+@AllArgsConstructor
+public abstract class UserEntity implements Serializable {
+
+
+    private static final long serialVersionUID = 1L;
     @Id
     protected Long id; // 主键ID
     @Column
@@ -28,8 +31,4 @@ public class Student extends UserEntity {
     protected String nickName; // 昵称
     @Column
     protected Boolean locked; // 账户是否被锁定
-    @Column
-    private int age;
-
-    private Resume resume;
 }

@@ -2,6 +2,8 @@ package com.shelby.service;
 
 import com.shelby.entity.Admin;
 
+import java.util.Map;
+
 /**
  * @Author Shelby Li
  * @Date 2021/5/13 21:19
@@ -9,5 +11,7 @@ import com.shelby.entity.Admin;
  */
 
 public interface AdminService {
-    public Admin queryByUsername(String username);
+    public Admin queryByName(String username);
+
+    public void insertData(Map<String, String> dataMap);
 }

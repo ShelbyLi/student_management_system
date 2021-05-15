@@ -12,4 +12,6 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface AdminMapper {
     public Admin queryByName(String name);
+
+    public void insertData(String name, String password);
 }
