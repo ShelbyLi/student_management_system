@@ -1,5 +1,5 @@
 
-package com.shelby.result;
+package com.shelby.util.result;
 //实现响应的枚举类
 public enum ExceptionMsg {
 	SUCCESS("200", "操作成功"),

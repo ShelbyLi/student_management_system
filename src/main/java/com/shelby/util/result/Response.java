@@ -1,4 +1,4 @@
-package com.shelby.result;
+package com.shelby.util.result;
 //实现返回对象实体
 public class Response {
 	/** 返回信息码*/

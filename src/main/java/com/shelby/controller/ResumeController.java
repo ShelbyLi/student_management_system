@@ -1,11 +1,10 @@
 package com.shelby.controller;
 
 import com.shelby.entity.Resume;
-import com.shelby.entity.Student;
 import com.shelby.mapper.ResumeMapper;
-import com.shelby.result.ExceptionMsg;
-import com.shelby.result.Response;
-import com.shelby.result.ResponseData;
+import com.shelby.util.result.ExceptionMsg;
+import com.shelby.util.result.Response;
+import com.shelby.util.result.ResponseData;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;

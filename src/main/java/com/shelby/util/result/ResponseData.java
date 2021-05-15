@@ -1,4 +1,4 @@
-package com.shelby.result;
+package com.shelby.util.result;
 //返回结果数据格式封装
 public class ResponseData extends Response {
     private Object data;

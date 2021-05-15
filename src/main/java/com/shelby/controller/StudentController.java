@@ -2,23 +2,25 @@ package com.shelby.controller;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.shelby.entity.Resume;
 import com.shelby.entity.Student;
-import com.shelby.mapper.ResumeMapper;
 import com.shelby.mapper.StudentMapper;
-import com.shelby.result.ExceptionMsg;
-import com.shelby.result.Response;
-import com.shelby.result.ResponseData;
+import com.shelby.util.result.ExceptionMsg;
+import com.shelby.util.result.Response;
+import com.shelby.util.result.ResponseData;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.apache.shiro.authc.UnknownAccountException;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * @Author Shelby Li
@@ -107,5 +109,30 @@ public class StudentController {
         return new ResponseData(ExceptionMsg.FAILED,student);
     }
 
+    @RequestMapping(value = "toLogin")
+    public String toLogin() {
+        return "login";
+    }
 
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public ResponseData login(String name, String pwd) {
+        // 获取当前用户
+        Subject subject = SecurityUtils.getSubject();
+        // 封装用户登录数据
+        UsernamePasswordToken token = new UsernamePasswordToken(name, pwd);
+
+        try {
+            subject.login(token); // 执行登录方法 没有异常就ok
+            return new ResponseData(ExceptionMsg.SUCCESS);
+        } catch (UnknownAccountException e) {
+            return new ResponseData(ExceptionMsg.FAILED, "用户名错误");
+        } catch (IncorrectCredentialsException e) {
+            return new ResponseData(ExceptionMsg.FAILED, "密码错误");
+        }
+    }
+
+    @RequestMapping(value = "/noauth")
+    public String unauthorized() {
+        return "未授权页面";
+    }
 }

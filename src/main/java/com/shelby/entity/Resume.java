@@ -2,6 +2,8 @@ package com.shelby.entity;
 
 import lombok.Data;
 
+import javax.persistence.Column;
+import javax.persistence.Id;
 import java.util.List;
 
 /**
@@ -12,8 +14,12 @@ import java.util.List;
 
 @Data
 public class Resume {
+    @Id
     private Integer id;
+    @Column
     private String content;
+    @Column
     private long stuId;
+
     private List<Experience> experienceList;
 }
