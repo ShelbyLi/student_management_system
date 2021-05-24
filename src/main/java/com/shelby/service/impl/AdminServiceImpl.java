@@ -4,6 +4,8 @@ import com.shelby.entity.Admin;
 import com.shelby.mapper.AdminMapper;
 import com.shelby.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -15,11 +17,13 @@ import java.util.Map;
  * @Version 1.0
  */
 @Service
+@CacheConfig(cacheNames = "adminService")
 public class AdminServiceImpl implements AdminService {
     @Autowired
     private AdminMapper adminMapper;
 
     @Override
+    @Cacheable(key ="#p0")
     public Admin queryByName(String name) {
         return adminMapper.queryByName(name);
     }

@@ -30,6 +30,8 @@ public class Student extends UserEntity {
     protected Boolean locked; // 账户是否被锁定
     @Column
     private int age;
+    @Column
+    private int gpa;
 
     private Resume resume;
 }
