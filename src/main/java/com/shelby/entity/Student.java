@@ -5,6 +5,7 @@ import org.apache.tomcat.jni.User;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
+import java.io.Serializable;
 
 /**
  * @Author Shelby Li
@@ -13,7 +14,7 @@ import javax.persistence.Id;
  */
 
 @Data
-public class Student extends UserEntity {
+public class Student extends UserEntity implements Serializable {
 //    @Id
 //    private int id;
 //    @Column

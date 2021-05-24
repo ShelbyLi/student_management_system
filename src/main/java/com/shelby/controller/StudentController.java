@@ -10,17 +10,23 @@ import com.shelby.util.result.ResponseData;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.DefaultTypedTuple;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @Author Shelby Li
@@ -39,6 +45,8 @@ public class StudentController {
     protected Response result(){
         return new Response();
     }
+    @Autowired
+    private RedisTemplate<String,String> redisTemplate;
 
     @Autowired
     StudentMapper studentMapper;
@@ -104,35 +112,52 @@ public class StudentController {
     public ResponseData findStudent(@PathVariable("id") Integer id) throws IOException {
         Student student = studentMapper.queryById(id);
         if (student != null) {
-            return new ResponseData(ExceptionMsg.SUCCESS,student);
+            return new ResponseData(ExceptionMsg.SUCCESS, student);
         }
-        return new ResponseData(ExceptionMsg.FAILED,student);
+        return new ResponseData(ExceptionMsg.FAILED, student);
     }
 
-    @RequestMapping(value = "toLogin")
-    public String toLogin() {
-        return "login";
-    }
-
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public ResponseData login(String name, String pwd) {
-        // 获取当前用户
-        Subject subject = SecurityUtils.getSubject();
-        // 封装用户登录数据
-        UsernamePasswordToken token = new UsernamePasswordToken(name, pwd);
-
-        try {
-            subject.login(token); // 执行登录方法 没有异常就ok
-            return new ResponseData(ExceptionMsg.SUCCESS);
-        } catch (UnknownAccountException e) {
-            return new ResponseData(ExceptionMsg.FAILED, "用户名错误");
-        } catch (IncorrectCredentialsException e) {
-            return new ResponseData(ExceptionMsg.FAILED, "密码错误");
+    @ApiOperation(value = "getTopN", notes = "用Redis快速获取绩点top n的同学")
+    @RequestMapping(value = "/getTopN/{n}", method = RequestMethod.GET)
+    public  ResponseData getTopN(@PathVariable("n") Long n) {
+        Set<ZSetOperations.TypedTuple<String>> set = new HashSet<>();
+        List<Student> students = studentMapper.getUserList();
+        for (Student student:students) {
+            String name = student.getName();
+            double gpa = student.getGpa();
+            DefaultTypedTuple<String> defaultTypedTuple = new DefaultTypedTuple<>(name, gpa);
+            set.add(defaultTypedTuple);
         }
+        redisTemplate.opsForZSet().add("score_rank", set);
+//        System.out.println(redisTemplate.opsForZSet().range("score_rank", 0, -1));
+        // 该函数为将set中的值排序 递增输出第start至end的成员. top n只需要输出末尾n人即可
+        return new ResponseData(ExceptionMsg.SUCCESS, redisTemplate.opsForZSet().range("score_rank", students.size()-n, -1));
     }
 
-    @RequestMapping(value = "/noauth")
-    public String unauthorized() {
-        return "未授权页面";
-    }
+//    @RequestMapping(value = "toLogin")
+//    public String toLogin() {
+//        return "login";
+//    }
+//
+//    @RequestMapping(value = "/login", method = RequestMethod.POST)
+//    public ResponseData login(String name, String pwd) {
+//        // 获取当前用户
+//        Subject subject = SecurityUtils.getSubject();
+//        // 封装用户登录数据
+//        UsernamePasswordToken token = new UsernamePasswordToken(name, pwd);
+//
+//        try {
+//            subject.login(token); // 执行登录方法 没有异常就ok
+//            return new ResponseData(ExceptionMsg.SUCCESS);
+//        } catch (UnknownAccountException e) {
+//            return new ResponseData(ExceptionMsg.FAILED, "用户名错误");
+//        } catch (IncorrectCredentialsException e) {
+//            return new ResponseData(ExceptionMsg.FAILED, "密码错误");
+//        }
+//    }
+//
+//    @RequestMapping(value = "/noauth")
+//    public String unauthorized() {
+//        return "未授权页面";
+//    }
 }

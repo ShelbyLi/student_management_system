@@ -16,13 +16,6 @@ import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 
 import java.lang.reflect.Method;
 
-/**
- * @Author Shelby Li
- * @Date 2021/5/20 21:11
- * @Version 1.0
- */
-
-
 @Configuration
 //@EnableCaching
 public class RedisConfig extends CachingConfigurerSupport {
@@ -51,7 +44,7 @@ public class RedisConfig extends CachingConfigurerSupport {
         RedisCacheManager cacheManager = RedisCacheManager.create(connectionFactory);
         //设置缓存过期时间
 
-        return cacheManager;
+        return (CacheManager) cacheManager;
     }
 
     @Bean

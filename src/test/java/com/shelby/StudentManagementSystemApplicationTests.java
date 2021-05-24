@@ -2,7 +2,7 @@ package com.shelby;
 
 import com.shelby.entity.Admin;
 import com.shelby.service.impl.AdminServiceImpl;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
