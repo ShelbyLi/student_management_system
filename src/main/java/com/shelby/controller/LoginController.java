@@ -15,6 +15,7 @@ import com.shelby.service.AdminService;
 import com.shelby.util.Jwt.JwtUtils;
 import com.shelby.util.result.ExceptionMsg;
 import com.shelby.util.result.Response;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
@@ -35,6 +36,7 @@ import java.util.Map;
 
 
 @RestController
+@Slf4j
 public class LoginController {
     @Autowired
     AdminService adminService;
@@ -76,6 +78,7 @@ public class LoginController {
             // 将签发的 JWT token 设置到 HttpServletResponse 的 Header 中
             ((HttpServletResponse) response).setHeader(JwtUtils.AUTH_HEADER, jwtToken);
             //
+            log.info("");
 
             return result(ExceptionMsg.SUCCESS);
         } else {
