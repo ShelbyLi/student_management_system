@@ -9,6 +9,7 @@ import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -17,7 +18,7 @@ import java.util.List;
  * @Date 2021/5/21 10:45
  * @Version 1.0
  */
-
+@Service
 @CacheConfig(cacheNames = "studentService")
 public class StudentServiceImpl implements StudentService {
     @Autowired

@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
+import java.io.Serializable;
 
 /**
  * @Author Shelby Li
@@ -12,7 +13,7 @@ import javax.persistence.Id;
  */
 
 @Data
-public class Experience {
+public class Experience implements Serializable {
     @Id
     private int id;
     @Column

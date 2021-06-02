@@ -12,7 +12,7 @@ import java.util.List;
  */
 
 public interface StudentService {
-        public Student queryById(Integer id);
+    public Student queryById(Integer id);
     public List<Student> queryAll();
     public int add(Student student);
     public int delById(long id);
